@@ -13,6 +13,13 @@ array_push($fruits, "bleuets", "fraises");
 // ou pour mettre au début : array_unshift
 // et TAS d'autres façons.
 
+// range()
+
+// array_filter()
+
+
+// ET DES TONNES !!!!
+
 
 
 
