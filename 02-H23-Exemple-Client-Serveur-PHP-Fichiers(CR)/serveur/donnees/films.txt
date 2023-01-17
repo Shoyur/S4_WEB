@@ -1,3 +1,1 @@
-Titanic;James Cameron;120
-Avengers;James Cameron;180
 Jam Bon 007;Snoopy;123

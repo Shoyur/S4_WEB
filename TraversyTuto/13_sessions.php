@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 // session : gardent de l'info dans des variables, pour plusieurs pages,
 // mais au contraire des cookies, garde plutôt sur le serveur
 
@@ -13,6 +13,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['username'] = $username;
         // print_r($_SESSION);
         header("Location: /S4_WEB/TraversyTuto/extras/config.php");
+        exit();
     }
     else {
         echo "Mauvais Login...";

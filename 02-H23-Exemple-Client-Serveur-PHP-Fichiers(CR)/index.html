@@ -32,7 +32,7 @@
                             <a class="nav-link" href="javascript:lister();">Lister(R)</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Modifier(U)</a>
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalUpdate">Modifier(U)</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalDelete">Supprimer(D)</a>
@@ -82,6 +82,44 @@
         </div>
     <!-- Fin modal enregistrer -->
 
+    <!-- Modal update -->       
+        <!-- Modal -->
+        <div class="modal fade" id="modalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modifier un film</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span id="msgErrUpdate"></span>
+                        <form class="row g-3" action="serveur/update.php" method="POST">
+                            <div class="col-md-12">
+                                <label for="titre" class="form-label">Titre</label>
+                                <input type="text" class="form-control is-valid" id="titre" name="titre" required>
+                            </div>
+                            <br/>
+                            <div class="col-md-12">
+                                <label for="res" class="form-label">Réalisateur</label>
+                                <input type="text" class="form-control is-valid" id="res" name="res" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="duree" class="form-label">Durée</label>
+                                <input type="number" min=30 max=240 class="form-control is-valid" id="duree" name="duree" required>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-primary" type="submit">Modifier</button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-danger" type="reset">Vider</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- Fin modal enregistrer -->
+
     <!-- Modal delete -->       
         <!-- Modal -->
         <div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,7 +131,7 @@
                     </div>
                     <div class="modal-body">
                         <span id="msgErrDelete"></span>
-                        <form class="row g-3" action="serveur/delete.php" method="POST" onSubmit="return validerFormDelete();">
+                        <form class="row g-3" action="serveur/delete.php" method="POST">
                             <div class="col-md-12">
                                 <label for="titre" class="form-label">Titre</label>
                                 <input type="text" class="form-control is-valid" id="titre" name="titre" required>

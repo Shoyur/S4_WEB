@@ -24,7 +24,7 @@
                     fputs($nouveauFicher, $ligne); //place $ligne dans le nouveau fichier
                 }
                 else {
-                    $trouve = true; // on a trouvé, donc on ne réécrit pas
+                    $trouve = true; // on a trouvé, donc on ne réécrit pas, car on veut le supprimer.
                 }
             }
             fclose($nouveauFicher);

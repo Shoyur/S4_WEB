@@ -1,9 +1,8 @@
 <?php
+session_start();
+// echo session_start();
 
-// session_start();
-echo session_start();
-
-print_r($_SESSION);
+// print_r($_SESSION);
 
 if (isset($_SESSION['username'])) {
     echo "<h1>Bienvenue " . $_SESSION['username'] . "</h1>";
