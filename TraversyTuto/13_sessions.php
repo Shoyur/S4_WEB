@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['username'] = $username;
         // print_r($_SESSION);
         header("Location: /S4_WEB/TraversyTuto/extras/config.php");
-        exit();
+        // exit();
     }
     else {
         echo "Mauvais Login...";
@@ -44,7 +44,7 @@ if (isset($_POST['submit'])) {
             <label for="password">Mot de passe : </label>
             <input type="password" name="password" id="">
         </div>
-        <input type="submit" value="enregistrer" name="submit">
+        <input type="submit" value="Connecter" name="submit">
     </form>
 </body>
 </html>

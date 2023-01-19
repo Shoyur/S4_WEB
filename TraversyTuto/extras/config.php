@@ -6,7 +6,7 @@ session_start();
 
 if (isset($_SESSION['username'])) {
     echo "<h1>Bienvenue " . $_SESSION['username'] . "</h1>";
-    echo "<a href='/S4_WEB/TraversyTuto/13_sessions.php'>Acceuil</a>";
+    echo "<a href='/S4_WEB/TraversyTuto/extras/logout.php'>Déconnecter</a>";
 }
 else {
     echo "<h1>Bienvenue INCONNU !!!</h1>";
