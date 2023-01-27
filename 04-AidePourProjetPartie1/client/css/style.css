@@ -1,0 +1,30 @@
+.bg-nav-perso{
+    background-color: coral !important;
+}
+
+.posToast {
+    position: absolute;
+    top: 5%;
+    left: 40%;
+}
+
+#textToast {
+    background-color: crimson;
+    color: white;
+}
+
+#cp{
+    color:white;
+    font-size: 20px;
+    float:inline-end;
+}
+
+i.bi-cart{
+    color: blue;
+    font-size: 24px;
+    float: inline-end;
+}
+
+.ul2navbar {
+    float: right;
+}
