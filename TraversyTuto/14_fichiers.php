@@ -1,8 +1,24 @@
 <?php
 
-// beaucoup de fonctions pour générer, chercher et manipuler des chaine de caractères
+// ouvrir ou créer un fichier :
 
+$fichier = "extras/lignes.txt";
 
+if (file_exists($fichier)) {
+    // echo readfile($fichier);
+    $fopen = fopen($fichier, 'r');
+    $contenu = fread($fopen, filesize($fichier));
+    fclose($fopen);
+    echo $fichier." existe, alors voici son contenu :<br>";
+    echo $contenu;
+}
+else {
+    $fopen = fopen($fichier, 'w');
+    $contenu = 'Ligne #1' . PHP_EOL . 'Ligne#2';
+    fwrite($fopen, $contenu);
+    fclose($fopen);
+    echo $fichier." n'existait pas, donc il a été créé!";
+}
 
 
 
