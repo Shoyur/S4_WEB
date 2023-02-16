@@ -1,0 +1,25 @@
+.nav-bg-perso{
+    background-color: aqua;
+    margin-bottom: 15px;
+}
+.card-style{
+    margin: 15px;
+    padding: 10px;
+}
+.img-style{
+    max-width: 300;
+    max-height: 444;
+}
+
+.bg-image{
+    background-image: url('client/images/bg.jpg');
+}
+
+.msg{
+    font-size:14px;
+    color: red;
+}
+.card{
+    margin:10px;
+    padding:10px;
+}
