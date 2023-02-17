@@ -2,7 +2,7 @@
     $SERVEUR = "localhost";
     $USAGER = "root";
     $PASS = "";
-    $BD = "bdupload";
+    $BD = "bdvoyages";
     try {
         $dns = "mysql:host=$SERVEUR;dbname=$BD";
         $options = array(
