@@ -1,108 +1,68 @@
 <?php
-session_start();
 require_once("dbcontroller.php");
 $db_handle = new DBController();
-if(!empty($_GET["action"])) {
-switch($_GET["action"]) {
-	case "add":
-		if(!empty($_POST["quantity"])) {
-			$productByCode = $db_handle->runQuery("SELECT * FROM tblproduct WHERE code='" . $_GET["code"] . "'");
-			$itemArray = array($productByCode[0]["code"]=>array('name'=>$productByCode[0]["name"], 'code'=>$productByCode[0]["code"], 'quantity'=>$_POST["quantity"], 'price'=>$productByCode[0]["price"], 'image'=>$productByCode[0]["image"]));
-			
-			if(!empty($_SESSION["cart_item"])) {
-				if(in_array($productByCode[0]["code"],array_keys($_SESSION["cart_item"]))) {
-					foreach($_SESSION["cart_item"] as $k => $v) {
-							if($productByCode[0]["code"] == $k) {
-								if(empty($_SESSION["cart_item"][$k]["quantity"])) {
-									$_SESSION["cart_item"][$k]["quantity"] = 0;
-								}
-								$_SESSION["cart_item"][$k]["quantity"] += $_POST["quantity"];
-							}
-					}
-				} else {
-					$_SESSION["cart_item"] = array_merge($_SESSION["cart_item"],$itemArray);
-				}
-			} else {
-				$_SESSION["cart_item"] = $itemArray;
-			}
-		}
-	break;
-	case "remove":
-		if(!empty($_SESSION["cart_item"])) {
-			foreach($_SESSION["cart_item"] as $k => $v) {
-					if($_GET["code"] == $k)
-						unset($_SESSION["cart_item"][$k]);				
-					if(empty($_SESSION["cart_item"]))
-						unset($_SESSION["cart_item"]);
-			}
-		}
-	break;
-	case "empty":
-		unset($_SESSION["cart_item"]);
-	break;	
-}
-}
 ?>
 <HTML>
 <HEAD>
-<TITLE>Simple PHP Shopping Cart</TITLE>
+<TITLE>PHP Shopping Cart with jQuery AJAX</TITLE>
 <link href="style.css" type="text/css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+<script>
+function showEditBox(editobj,id) {
+	$('#frmAdd').hide();
+	$(editobj).prop('disabled','true');
+	var currentMessage = $("#message_" + id + " .message-content").html();
+	var editMarkUp = '<textarea rows="5" cols="80" id="txtmessage_'+id+'">'+currentMessage+'</textarea><button name="ok" onClick="callCrudAction(\'edit\','+id+')">Save</button><button name="cancel" onClick="cancelEdit(\''+currentMessage+'\','+id+')">Cancel</button>';
+	$("#message_" + id + " .message-content").html(editMarkUp);
+}
+function cancelEdit(message,id) {
+	$("#message_" + id + " .message-content").html(message);
+	$('#frmAdd').show();
+}
+function cartAction(action,product_code) {
+	var queryString = "";
+	if(action != "") {
+		switch(action) {
+			case "add":
+				queryString = 'action='+action+'&code='+ product_code+'&quantity='+$("#qty_"+product_code).val();
+			break;
+			case "remove":
+				queryString = 'action='+action+'&code='+ product_code;
+			break;
+			case "empty":
+				queryString = 'action='+action;
+			break;
+		}	 
+	}
+	jQuery.ajax({
+	url: "ajax_action.php",
+	data:queryString,
+	type: "POST",
+	success:function(data){
+		$("#cart-item").html(data);
+		if(action != "") {
+			switch(action) {
+				case "add":
+					$("#add_"+product_code).hide();
+					$("#added_"+product_code).show();
+				break;
+				case "remove":
+					$("#add_"+product_code).show();
+					$("#added_"+product_code).hide();
+				break;
+				case "empty":
+					$(".btnAddAction").show();
+					$(".btnAdded").hide();
+				break;
+			}	 
+		}
+	},
+	error:function (){}
+	});
+}
+</script>
 </HEAD>
 <BODY>
-<div id="shopping-cart">
-<div class="txt-heading">Shopping Cart</div>
-
-<a id="btnEmpty" href="index.php?action=empty">Empty Cart</a>
-<?php
-if(isset($_SESSION["cart_item"])){
-    $total_quantity = 0;
-    $total_price = 0;
-?>	
-<table class="tbl-cart" cellpadding="10" cellspacing="1">
-<tbody>
-<tr>
-<th style="text-align:left;">Name</th>
-<th style="text-align:left;">Code</th>
-<th style="text-align:right;" width="5%">Quantity</th>
-<th style="text-align:right;" width="10%">Unit Price</th>
-<th style="text-align:right;" width="10%">Price</th>
-<th style="text-align:center;" width="5%">Remove</th>
-</tr>	
-<?php		
-    foreach ($_SESSION["cart_item"] as $item){
-        $item_price = $item["quantity"]*$item["price"];
-		?>
-				<tr>
-				<td><img src="<?php echo $item["image"]; ?>" class="cart-item-image" /><?php echo $item["name"]; ?></td>
-				<td><?php echo $item["code"]; ?></td>
-				<td style="text-align:right;"><?php echo $item["quantity"]; ?></td>
-				<td  style="text-align:right;"><?php echo "$ ".$item["price"]; ?></td>
-				<td  style="text-align:right;"><?php echo "$ ". number_format($item_price,2); ?></td>
-				<td style="text-align:center;"><a href="index.php?action=remove&code=<?php echo $item["code"]; ?>" class="btnRemoveAction"><img src="icon-delete.png" alt="Remove Item" /></a></td>
-				</tr>
-				<?php
-				$total_quantity += $item["quantity"];
-				$total_price += ($item["price"]*$item["quantity"]);
-		}
-		?>
-
-<tr>
-<td colspan="2" align="right">Total:</td>
-<td align="right"><?php echo $total_quantity; ?></td>
-<td align="right" colspan="2"><strong><?php echo "$ ".number_format($total_price, 2); ?></strong></td>
-<td></td>
-</tr>
-</tbody>
-</table>		
-  <?php
-} else {
-?>
-<div class="no-records">Your Cart is Empty</div>
-<?php 
-}
-?>
-</div>
-
 <div id="product-grid">
 	<div class="txt-heading">Products</div>
 	<?php
@@ -111,19 +71,41 @@ if(isset($_SESSION["cart_item"])){
 		foreach($product_array as $key=>$value){
 	?>
 		<div class="product-item">
-			<form method="post" action="index.php?action=add&code=<?php echo $product_array[$key]["code"]; ?>">
+			<form id="frmCart">
 			<div class="product-image"><img src="<?php echo $product_array[$key]["image"]; ?>"></div>
-			<div class="product-tile-footer">
-			<div class="product-title"><?php echo $product_array[$key]["name"]; ?></div>
+			<div><strong><?php echo $product_array[$key]["name"]; ?></strong></div>
 			<div class="product-price"><?php echo "$".$product_array[$key]["price"]; ?></div>
-			<div class="cart-action"><input type="text" class="product-quantity" name="quantity" value="1" size="2" /><input type="submit" value="Add to Cart" class="btnAddAction" /></div>
+			<div><input type="text" id="qty_<?php echo $product_array[$key]["code"]; ?>" name="quantity" value="1" size="2" />
+			<?php
+				$in_session = "0";
+				if(!empty($_SESSION["cart_item"])) {
+					$session_code_array = array_keys($_SESSION["cart_item"]);
+				    if(in_array($product_array[$key]["code"],$session_code_array)) {
+						$in_session = "1";
+				    }
+				}
+			?>
+			<input type="button" id="add_<?php echo $product_array[$key]["code"]; ?>" value="Add to cart" class="btnAddAction cart-action" onClick = "cartAction('add','<?php echo $product_array[$key]["code"]; ?>')" <?php if($in_session != "0") { ?>style="display:none" <?php } ?> />
+			<input type="button" id="added_<?php echo $product_array[$key]["code"]; ?>" value="Added" class="btnAdded" <?php if($in_session != "1") { ?>style="display:none" <?php } ?> />
 			</div>
 			</form>
 		</div>
 	<?php
-		}
+			}
 	}
 	?>
 </div>
+<div class="clear-float"></div>
+<div id="shopping-cart">
+<div class="txt-heading">Shopping Cart <a id="btnEmpty" class="cart-action" onClick="cartAction('empty','');">Empty Cart</a></div>
+<div id="cart-item"></div>
+</div>
+<script>
+$(document).ready(function () {
+	cartAction('','');
+})
+</script>
+
+
 </BODY>
 </HTML>

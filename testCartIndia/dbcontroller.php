@@ -2,22 +2,28 @@
 class DBController {
 	private $host = "localhost";
 	private $user = "root";
-	private $password = "test";
+	private $password = "";
 	private $database = "blog_samples";
-	private $conn;
 	
 	function __construct() {
-		$this->conn = $this->connectDB();
+		$conn = $this->connectDB();
+		if(!empty($conn)) {
+			$this->selectDB($conn);
+		}
 	}
 	
 	function connectDB() {
-		$conn = mysqli_connect($this->host,$this->user,$this->password,$this->database);
+		$conn = mysqli_connect($this->host,$this->user,$this->password);
 		return $conn;
 	}
 	
+	function selectDB($conn) {
+		mysqli_select_db($this->database,$conn);
+	}
+	
 	function runQuery($query) {
-		$result = mysqli_query($this->conn,$query);
-		while($row=mysqli_fetch_assoc($result)) {
+		$result = mysql_query($query);
+		while($row=mysql_fetch_assoc($result)) {
 			$resultset[] = $row;
 		}		
 		if(!empty($resultset))
@@ -25,8 +31,8 @@ class DBController {
 	}
 	
 	function numRows($query) {
-		$result  = mysqli_query($this->conn,$query);
-		$rowcount = mysqli_num_rows($result);
+		$result  = mysql_query($query);
+		$rowcount = mysql_num_rows($result);
 		return $rowcount;	
 	}
 }
