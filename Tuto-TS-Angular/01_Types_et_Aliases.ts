@@ -98,7 +98,7 @@ console.log("c2= " + c2);
 
 // TYPE
 // on peut se créer des types customs
-// c'est des GENERICS
+// c'est des ALIASes
 type StringArray = Array<string>;
 type NumberArray = Array<number>;
 type ObjectWithNameArray = Array<{ name: string }>;
