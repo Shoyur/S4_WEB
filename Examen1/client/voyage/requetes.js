@@ -13,7 +13,7 @@ let reqEnregistrer = (action) => {
 		contentType : false,
 		processData : false
 	}).done((reponse)  => { creerVue('enregistrer', reponse); })
-	.fail(function() { alert( "error" ); })
+	.fail(function($d) { alert( "error" ); })
 	.always(function() {  });
 }
 
